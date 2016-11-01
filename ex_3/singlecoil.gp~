@@ -1,0 +1,8 @@
+set xlabel 'x /m'
+set ylabel 'Magnetic Field /T'
+set title 'Plot of difference between calculated B field and analytic result against displacement along the x axis for a single coil centred on (0,0,0)'
+unset key
+set format y "%.1s*10^{%S}"
+plot 'singlecoilx.txt' u 1:4 w linesp
+
+pause -1

@@ -1,0 +1,67 @@
+// Fresnel integrals using GSL integration routine
+
+#include <iostream>
+#include <cmath>
+#include <gsl/gsl_integration.h>
+using namespace std;
+
+const double pi = 4*atan(1);
+const double lambda = 0.01;
+const double slit_w = 0.1;
+const double s_dist = 0.5;
+gsl_function F;
+
+double c (double x, void *params) {
+	
+	double alpha = *(double *) params; //recovers alpha
+	return cos(pi*alpha*x*x/(lambda*s_dist));
+}
+
+double s (double x, void *params) {
+	
+	double alpha = *(double *) params;
+	return sin(pi*alpha*x*x/(lambda*s_dist));
+}
+
+void integration (double &result, double &error, gsl_integration_workspace *w, double u) {
+	
+	double alpha = 1.0; //parameter in integrand
+	
+	F.params = &alpha;
+	
+	gsl_integration_qag (&F, 0, u, 0, 1e-7, 1000, 4, w, &result, &error);
+	//compute integration within a relative error of 1e7
+}
+
+void diffraction () {
+	
+	gsl_integration_workspace *w = gsl_integration_workspace_alloc (1000);
+	double u = slit_w; //upper limit on integral
+	double result_c1, result_c2, result_s1, result_s2, error;
+	double x1 = -slit_w;
+	double x2 = 0;
+	
+	while (x2 < u) {
+		F.function = &c;
+		integration(result_c1, error, w, x1);
+		integration(result_c2, error, w, x2);
+		F.function = &s;
+		integration(result_s1, error, w, x1);
+		integration(result_s2, error, w, x2);
+		cout << x1 + slit_w/2 << "	" << (result_c2 - result_c1)/sqrt(2);
+		cout << "	" << (result_s2 - result_s1)/sqrt(2) << endl;
+		x1 += 0.0005;
+		x2 += 0.0005;
+		
+	}
+	
+	gsl_integration_workspace_free (w);
+}
+
+int main() {
+	
+	cout.precision(18);
+	diffraction();
+	
+	return 0;
+}

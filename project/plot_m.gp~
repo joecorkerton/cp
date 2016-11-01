@@ -1,0 +1,9 @@
+set term pngcairo font "sans, 34" size 3200,1800
+set output 'magnetisation_3_402.png'
+set xlabel 'Number of iterations'
+set ylabel 'Magnetisation'
+set title 'Plot of magnetisation against number of iterations when T = 3 J/k_B and N = 40'
+unset key
+set yrange [-0.4:0.4]
+plot '3_40.txt' u 1:2 w linesp
+

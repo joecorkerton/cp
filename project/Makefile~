@@ -1,0 +1,5 @@
+Ising.exe: Ising.o
+	g++ -o Ising.exe Ising.o
+	
+Ising.o: Ising.cpp
+	g++ -c Ising.cpp -lgsl -lgslcblas

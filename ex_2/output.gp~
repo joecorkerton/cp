@@ -1,0 +1,4 @@
+set xlabel 'time /s'
+set ylabel 'Amplitude'
+set title 'Plot of displacement/ velocity over 1000 periods of oscillation'
+plot 

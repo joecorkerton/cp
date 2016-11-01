@@ -1,0 +1,5 @@
+CC = g++
+LFLAGS = -Wall -lgsl -lgslcblas
+
+Ising:
+	$(CC) Ising.cpp -o Ising $(LFLAGS)
